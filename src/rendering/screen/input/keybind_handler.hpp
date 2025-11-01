@@ -3,6 +3,9 @@
 #include <iostream>
 #include <unordered_set>
 #include <functional>
+#include <vector>
+
+#include <GLFW/glfw3.h>
 
 #include "../screen_class.hpp"
 
@@ -49,11 +52,14 @@ public:
 
     // ======= MAIN API =======
 
-    /// @brief Check if a specific key is held down
+    /// @brief Check if a specific valid key is held down
     /// @param key
     /// @return bool
     bool is_key_down(int key)
     {
+        if (keys_to_track.find(key) == keys_to_track.end())
+            return false;
+
         return glfwGetKey(current_window, key) == GLFW_PRESS;
     }
 };

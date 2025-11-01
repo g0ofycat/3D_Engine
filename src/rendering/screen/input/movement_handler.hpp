@@ -1,5 +1,7 @@
 #pragma once
 
+#include <GLFW/glfw3.h>
+
 #include "./keybind_handler.hpp"
 #include "../camera/camera_handler.hpp"
 
@@ -36,6 +38,8 @@ public:
             keys.is_key_down(GLFW_KEY_A),
             keys.is_key_down(GLFW_KEY_S),
             keys.is_key_down(GLFW_KEY_D),
+            keys.is_key_down(GLFW_KEY_Q),
+            keys.is_key_down(GLFW_KEY_E),
             deltaTime);
     }
 };

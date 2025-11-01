@@ -95,7 +95,7 @@ public:
     /// @param backwardMove
     /// @param rightMove
     /// @param deltaTime
-    void processKeyboard(bool forwardMove, bool leftMove, bool backwardMove, bool rightMove, float deltaTime)
+    void processKeyboard(bool forwardMove, bool leftMove, bool backwardMove, bool rightMove, bool upMove, bool downMove, float deltaTime)
     {
         if (deltaTime <= 0.0f || std::isnan(deltaTime) || std::isinf(deltaTime))
             return;
@@ -110,6 +110,10 @@ public:
             move(right, -velocity);
         if (rightMove)
             move(right, velocity);
+        if (upMove)
+            move(up, velocity);
+        if (downMove)
+            move(up, -velocity);
     }
 
     /// @brief Handler for mouse movement

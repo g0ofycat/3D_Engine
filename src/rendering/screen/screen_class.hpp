@@ -25,11 +25,10 @@ public:
     /// @param window_width
     /// @param window_height
     /// @param window_name
-    /// @param fullscreen
-    screen_class(int window_width, int window_height, const char *window_name, bool fullscreen)
+    screen_class(int window_width, int window_height, const char *window_name)
         : width(window_width), height(window_height), name(window_name)
     {
-        if (create_window(fullscreen) != 0)
+        if (create_window() != 0)
         {
             throw std::runtime_error("Failed to create window");
         }
@@ -44,7 +43,7 @@ public:
 
     /// @brief Creates a new window
     /// @return int: 0 on success, -1 if something failed
-    int create_window(bool fullscreen)
+    int create_window()
     {
         if (!glfwInit())
             return -1;
@@ -53,15 +52,6 @@ public:
         {
             std::cout << "create_window(): Window is already initialized";
             return -1;
-        }
-
-        GLFWmonitor *monitor = fullscreen ? glfwGetPrimaryMonitor() : nullptr;
-
-        if (fullscreen)
-        {
-            const GLFWvidmode *mode = glfwGetVideoMode(monitor);
-            width = mode->width;
-            height = mode->height;
         }
 
         window = glfwCreateWindow(width, height, name, nullptr, nullptr);

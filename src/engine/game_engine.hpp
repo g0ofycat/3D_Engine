@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "../rendering/screen/screen_class.hpp"
 #include "../rendering/screen/input/keybind_handler.hpp"
 
@@ -11,6 +13,9 @@
 
 #include "../rendering/screen/input/movement_handler.hpp"
 #include "../rendering/screen/camera/camera_handler.hpp"
+
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -91,12 +96,12 @@ public:
     /// @param width: Starting Width of window
     /// @param height: Starting Height of window
     /// @param title: Title of the window
-    /// @param fullscreen: If the window should support fullscreen
-    game_engine(int width, int height, const char *title, bool fullscreen = false)
-        : screen(width, height, title, fullscreen),
+    /// @param valid_keys: Keys that should be tracked
+    game_engine(int width, int height, const char *title, const std::vector<int> &valid_keys)
+        : screen(width, height, title),
           shader("../src/rendering/graphics/shaders/glsl_files/vertex_shader.glsl",
                  "../src/rendering/graphics/shaders/glsl_files/fragment_shader.glsl"),
-          key_handler(screen, {GLFW_KEY_W, GLFW_KEY_A, GLFW_KEY_S, GLFW_KEY_D}),
+          key_handler(screen, valid_keys),
           camera(),
           mover(key_handler, camera)
     {
