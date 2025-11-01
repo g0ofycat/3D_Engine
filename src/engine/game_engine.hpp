@@ -46,15 +46,9 @@ private:
     /// @brief Setup Scene
     void setup_scene()
     {
-        auto square = object_lib::cube();
+        size_t obj_id = world_objects.spawn_object(shader, object_lib::cube());
 
-        std::vector<float> vertices = std::get<std::vector<float>>(square["vertices"]);
-        std::vector<float> colors = std::get<std::vector<float>>(square["colors"]);
-        vertexCount = std::get<int>(square["count"]);
-
-        VAO = vertices_class::create_object(vertices, colors);
-
-        auto &cubeObj = world_objects.create_new_object(shader, Mesh{VAO, vertexCount});
+        world_objects.get_object(obj_id).scale_set(2.0f, 2.0f, 2.0f);
 
         glEnable(GL_DEPTH_TEST);
     }
@@ -86,15 +80,8 @@ private:
     /// @brief Render 3D World
     void render()
     {
-        shader.use();
-
-        glm::mat4 model = glm::mat4(1.0f);
-        glm::mat4 view = camera.getViewMatrix();
-        glm::mat4 projection = camera.getProjectionMatrix();
-
-        shader.setMat4("model", model);
-        shader.setMat4("view", view);
-        shader.setMat4("projection", projection);
+        shader.setMat4("view", camera.getViewMatrix());
+        shader.setMat4("projection", camera.getProjectionMatrix());
 
         world_objects.render_all();
     }
@@ -127,6 +114,8 @@ public:
     /// @brief Run the engine loop
     void run()
     {
+        shader.use();
+
         while (!screen.should_close())
         {
             screen.clear();

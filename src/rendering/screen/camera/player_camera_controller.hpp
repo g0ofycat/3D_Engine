@@ -28,6 +28,8 @@ struct Vec3
 class player_camera_controller
 {
 private:
+    // ======= CAMERA =======
+
     Vec3 position;
     Vec3 front;
     Vec3 up;
@@ -40,11 +42,15 @@ private:
     float speed;
     float sensitivity;
 
+    // ======= MOUSE =======
+
     float lastX = 0;
     float lastY = 0;
     bool firstMouse = true;
 
-    float aspectRatio = 3.0f / 3.0f;
+    // ======= SCREEN =======
+
+    float aspectRatio = 1.0f / 1.0f;
 
 private:
     /// @brief Transform and update vectors
