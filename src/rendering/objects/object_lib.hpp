@@ -57,6 +57,8 @@ public:
         return {{"vertices", vertices}, {"colors", colors}, {"count", 6}};
     }
 
+    // ======= 3D SHAPES =======
+
     /// @brief Cube object
     /// @return {{"vertices", vertices}, {"colors", colors}, {"count", 36}};
     static std::unordered_map<std::string, std::variant<int, std::vector<float>>> cube()
