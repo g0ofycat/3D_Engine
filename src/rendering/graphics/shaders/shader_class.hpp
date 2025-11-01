@@ -100,6 +100,13 @@ public:
         glUniform3f(loc, x, y, z);
     }
 
+    /// @brief Set a vec3 uniform using glm::vec3
+    void setVec3(const std::string &name, const glm::vec3 &value) const
+    {
+        int loc = glGetUniformLocation(ID, name.c_str());
+        glUniform3f(loc, value.x, value.y, value.z);
+    }
+
     // ======= STATIC METHODS =======
 
     /// @brief Load shader source from file

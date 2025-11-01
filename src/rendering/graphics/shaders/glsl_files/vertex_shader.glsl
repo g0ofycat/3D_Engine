@@ -8,8 +8,14 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
+uniform vec3 objPos;
+
+uniform vec3 objScale;
+
 void main()
 {
-    gl_Position = projection * view * model * vec4(aPos, 1.0);
+    vec3 scaledPos = objScale * aPos;
+    vec3 worldPos = objPos + scaledPos;
+    gl_Position = projection * view * model * vec4(worldPos, 1.0);
     vertexColor = aColor;
 }

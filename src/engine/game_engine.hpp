@@ -8,8 +8,8 @@
 #include "../rendering/graphics/vertices_class.hpp"
 #include "../rendering/graphics/shaders/shader_class.hpp"
 
-#include "../rendering/objects/object_mover.hpp"
-#include "../rendering/objects/object_lib.hpp"
+#include "../rendering/objects/management/object_manager.hpp"
+#include "../rendering/objects/creation/object_lib.hpp"
 
 #include "../rendering/screen/input/movement_listener.hpp"
 #include "../rendering/screen/camera/player_camera_controller.hpp"
@@ -25,11 +25,19 @@
 class game_engine
 {
 private:
+    // ======= PLAYER CONTROLS =======
+
     screen_class screen;
     shader_class shader;
     keybind_handler key_handler;
     player_camera_controller camera;
     movement_listener mover;
+
+    // ======= WORLD DATA =======
+
+    object_manager world_objects;
+
+    // ======= RENDERING =======
 
     unsigned int VAO;
     int vertexCount;
@@ -39,11 +47,14 @@ private:
     void setup_scene()
     {
         auto square = object_lib::cube();
+
         std::vector<float> vertices = std::get<std::vector<float>>(square["vertices"]);
         std::vector<float> colors = std::get<std::vector<float>>(square["colors"]);
         vertexCount = std::get<int>(square["count"]);
 
         VAO = vertices_class::create_object(vertices, colors);
+
+        auto &cubeObj = world_objects.create_new_object(shader, Mesh{VAO, vertexCount});
 
         glEnable(GL_DEPTH_TEST);
     }
@@ -85,8 +96,7 @@ private:
         shader.setMat4("view", view);
         shader.setMat4("projection", projection);
 
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+        world_objects.render_all();
     }
 
 public:
