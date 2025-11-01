@@ -44,7 +44,7 @@ private:
     float lastY = 0;
     bool firstMouse = true;
 
-    float aspectRatio = 4.0f / 3.0f;
+    float aspectRatio = 3.0f / 3.0f;
 
 private:
     /// @brief Transform and update vectors
