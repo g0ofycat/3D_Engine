@@ -23,9 +23,9 @@ struct Vec3
     static Vec3 from_glm(const glm::vec3 &v) { return {v.x, v.y, v.z}; }
 };
 
-// ======= camera_handler =======
+// ======= player_camera_controller =======
 
-class camera_handler
+class player_camera_controller
 {
 private:
     Vec3 position;
@@ -76,12 +76,12 @@ private:
 public:
     // ======= CONSTRUCTOR =======
 
-    /// @brief Constructor for camera_handler
+    /// @brief Constructor for player_camera_controller
     /// @param pos: Default position
     /// @param upDir: Up direction of the camera
     /// @param yaw_: X axis rotation
     /// @param pitch_: Y axis rotation
-    camera_handler(Vec3 pos = {0, 0, 3}, Vec3 upDir = {0, 1, 0}, float yaw_ = -90.0f, float pitch_ = 0.0f)
+    player_camera_controller(Vec3 pos = {0, 0, 3}, Vec3 upDir = {0, 1, 0}, float yaw_ = -90.0f, float pitch_ = 0.0f)
         : position(pos), worldUp(upDir), yaw(yaw_), pitch(pitch_), speed(2.5f), sensitivity(0.1f)
     {
         updateVectors();
@@ -89,31 +89,42 @@ public:
 
     // ======= MAIN API =======
 
-    /// @brief Handler for keyboard movement
-    /// @param forwardMove
-    /// @param leftMove
-    /// @param backwardMove
-    /// @param rightMove
+    /// @brief Process keyboard input
+    /// @param keysDown
     /// @param deltaTime
-    void processKeyboard(bool forwardMove, bool leftMove, bool backwardMove, bool rightMove, bool upMove, bool downMove, float deltaTime)
+    void processKeyboard(const std::vector<int> &keysDown, float deltaTime)
     {
         if (deltaTime <= 0.0f || std::isnan(deltaTime) || std::isinf(deltaTime))
             return;
 
         float velocity = speed * deltaTime;
 
-        if (forwardMove)
-            move(front, velocity);
-        if (backwardMove)
-            move(front, -velocity);
-        if (leftMove)
-            move(right, -velocity);
-        if (rightMove)
-            move(right, velocity);
-        if (upMove)
-            move(up, velocity);
-        if (downMove)
-            move(up, -velocity);
+        for (int key : keysDown)
+        {
+            switch (key)
+            {
+            case GLFW_KEY_W:
+                move(front, velocity);
+                break;
+            case GLFW_KEY_S:
+                move(front, -velocity);
+                break;
+            case GLFW_KEY_A:
+                move(right, -velocity);
+                break;
+            case GLFW_KEY_D:
+                move(right, velocity);
+                break;
+            case GLFW_KEY_Q:
+                move(up, velocity);
+                break;
+            case GLFW_KEY_E:
+                move(up, -velocity);
+                break;
+            default:
+                break;
+            }
+        }
     }
 
     /// @brief Handler for mouse movement
@@ -139,7 +150,7 @@ public:
     /// @param ypos: Current Y position
     static void mouse_callback(GLFWwindow *window, double xpos, double ypos)
     {
-        camera_handler *cam = static_cast<camera_handler *>(glfwGetWindowUserPointer(window));
+        player_camera_controller *cam = static_cast<player_camera_controller *>(glfwGetWindowUserPointer(window));
         if (!cam)
             return;
 

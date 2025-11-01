@@ -11,8 +11,8 @@
 #include "../rendering/objects/object_mover.hpp"
 #include "../rendering/objects/object_lib.hpp"
 
-#include "../rendering/screen/input/movement_handler.hpp"
-#include "../rendering/screen/camera/camera_handler.hpp"
+#include "../rendering/screen/input/movement_listener.hpp"
+#include "../rendering/screen/camera/player_camera_controller.hpp"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -28,8 +28,8 @@ private:
     screen_class screen;
     shader_class shader;
     keybind_handler key_handler;
-    camera_handler camera;
-    movement_handler mover;
+    player_camera_controller camera;
+    movement_listener mover;
 
     unsigned int VAO;
     int vertexCount;
@@ -58,7 +58,7 @@ private:
 
         if (height > 0)
         {
-            camera_handler *cam = static_cast<camera_handler *>(glfwGetWindowUserPointer(window));
+            player_camera_controller *cam = static_cast<player_camera_controller *>(glfwGetWindowUserPointer(window));
             cam->setAspectRatio(width / (float)height);
         }
     }
@@ -68,7 +68,7 @@ private:
     {
         glfwSetWindowUserPointer(screen.get_window(), &camera);
         glfwSetInputMode(screen.get_window(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-        glfwSetCursorPosCallback(screen.get_window(), camera_handler::mouse_callback);
+        glfwSetCursorPosCallback(screen.get_window(), player_camera_controller::mouse_callback);
         glfwSetFramebufferSizeCallback(screen.get_window(), framebuffer_size_callback);
     }
 
@@ -108,6 +108,8 @@ public:
         setup_scene();
 
         setup_input();
+
+        camera.setAspectRatio(static_cast<float>(width) / static_cast<float>(height));
     }
 
     // ======= MAIN API =======

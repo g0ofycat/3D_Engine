@@ -57,9 +57,10 @@ public:
     /// @return bool
     bool is_key_down(int key)
     {
-        if (keys_to_track.find(key) == keys_to_track.end())
-            return false;
-
         return glfwGetKey(current_window, key) == GLFW_PRESS;
     }
+
+    /// @brief Get all keys that can be pressed
+    /// @return std::unordered_set<int>
+    std::unordered_set<int> get_valid_keys() const { return keys_to_track; }
 };
