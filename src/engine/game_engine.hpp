@@ -33,10 +33,6 @@ private:
     player_camera_controller camera;
     movement_listener mover;
 
-    // ======= WORLD DATA =======
-
-    object_manager world_objects;
-
     // ======= RENDERING =======
 
     unsigned int VAO;
@@ -75,6 +71,11 @@ private:
 
         world_objects.render_all();
     }
+
+public:
+    // ======= WORLD DATA =======
+
+    object_manager world_objects;
 
 public:
     // ======= CONSTRUCTOR =======
