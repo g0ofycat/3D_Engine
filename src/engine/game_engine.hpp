@@ -43,16 +43,6 @@ private:
     int vertexCount;
 
 private:
-    /// @brief Setup Scene
-    void setup_scene()
-    {
-        size_t obj_id = world_objects.spawn_object(shader, object_lib::cube());
-
-        world_objects.get_object(obj_id).scale_set(2.0f, 2.0f, 2.0f);
-
-        glEnable(GL_DEPTH_TEST);
-    }
-
     /// @brief Used for window resizing
     /// @param window
     /// @param width
@@ -102,14 +92,42 @@ public:
           camera(),
           mover(key_handler, camera)
     {
-        setup_scene();
+        glEnable(GL_DEPTH_TEST);
 
         setup_input();
 
         camera.setAspectRatio(static_cast<float>(width) / static_cast<float>(height));
     }
 
-    // ======= MAIN API =======
+    // ======= OBJECT API =======
+
+    /// @brief Create a new object in the world
+    /// @param shapeData: Shape data from object_lib containing vertices, colors, and count
+    /// @param pos: Initial position of the object (default: origin)
+    /// @param scale: Initial scale of the object (default: 1, 1, 1)
+    /// @return size_t: The ID of the object
+    size_t create_new_object(
+        const std::unordered_map<std::string, std::variant<int, std::vector<float>>> &shapeData,
+        const glm::vec3 &pos = {0.0f, 0.0f, 0.0f},
+        const glm::vec3 &scale = {1.0f, 1.0f, 1.0f})
+    {
+        size_t obj_id = world_objects.spawn_object(shader, shapeData, pos, scale);
+
+        return obj_id;
+    }
+
+    /// @brief Delete a specfic object
+    /// @param obj_id: The ID of the object
+    void delete_object(size_t obj_id) {
+        world_objects.delete_object(obj_id);
+    }
+
+    /// @brief Clear all objects in the world
+    void clear_world() {
+        world_objects.clear_world();
+    }
+
+    // ======= RENDERING API =======
 
     /// @brief Run the engine loop
     void run()

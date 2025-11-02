@@ -37,7 +37,7 @@ public:
             obj.render();
     }
 
-    // ======= UTILITY API =======
+    // ======= OBJECT API =======
 
     /// @brief Create and add a new object to the manager
     /// @param shader: Reference to the shader
@@ -67,8 +67,8 @@ public:
     size_t spawn_object(
         shader_class &shader,
         const std::unordered_map<std::string, std::variant<int, std::vector<float>>> &shapeData,
-        const glm::vec3 &pos = {0.0f, 0.0f, 0.0f},
-        const glm::vec3 &scale = {1.0f, 1.0f, 1.0f})
+        const glm::vec3 &pos,
+        const glm::vec3 &scale)
     {
         std::vector<float> vertices = std::get<std::vector<float>>(shapeData.at("vertices"));
         std::vector<float> colors = std::get<std::vector<float>>(shapeData.at("colors"));
@@ -85,6 +85,19 @@ public:
 
         return index;
     }
+
+    /// @brief Delete a specfic object
+    /// @param obj_id: The ID of the object
+    void delete_object(size_t obj_id) {
+        objects.erase(objects.begin() + obj_id);
+    }
+
+    /// @brief Clear all objects in the world
+    void clear_world() {
+        objects.clear();
+    }
+
+    // ======= UTILITY API =======
 
     /// @brief Get all objects (read-only)
     /// @return A const reference to the list of objects

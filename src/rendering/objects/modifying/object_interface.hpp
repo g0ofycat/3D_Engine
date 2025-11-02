@@ -24,7 +24,7 @@ private:
     glm::vec3 scale{1.0f};
     glm::mat4 modelMatrix{1.0f};
 
-    shader_class &shader;
+    shader_class *shader;
     Mesh mesh;
 
 private:
@@ -43,7 +43,7 @@ public:
     /// @param shaderRef: Reference to the shader
     /// @param meshRef: Reference to the mesh
     object_interface(shader_class &shaderRef, const Mesh &meshRef)
-        : shader(shaderRef), mesh(meshRef)
+        : shader(&shaderRef), mesh(meshRef)
     {
         updateModelMatrix();
     }
@@ -83,9 +83,9 @@ public:
     // ======= RENDERING =======
 
     /// @brief Render the object
-    void render()
+    void render() const
     {
-        shader.setMat4("model", modelMatrix);
+        shader->setMat4("model", modelMatrix);
 
         glBindVertexArray(mesh.VAO);
         glDrawArrays(GL_TRIANGLES, 0, mesh.vertexCount);
@@ -100,4 +100,12 @@ public:
     /// @brief Return scale of the current shader
     /// @return const glm::vec3&
     const glm::vec3 &get_scale() const { return scale; }
+
+    /// @brief Get the current shader
+    /// @return shader_class*
+    shader_class* get_shader() const { return shader; }
+
+    /// @brief Get the current mesh
+    /// @return const Mesh&
+    const Mesh& get_mesh() const { return mesh; }
 };
