@@ -101,7 +101,7 @@ public:
     /// @param sz: Z Scale
     void scale_add(float sx, float sy, float sz)
     {
-        scale = glm::vec3(sx, sy, sz);
+        scale += glm::vec3(sx, sy, sz);
         updateModelMatrix();
     }
 

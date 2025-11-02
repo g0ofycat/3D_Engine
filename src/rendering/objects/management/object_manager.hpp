@@ -105,7 +105,7 @@ public:
 
     // ======= UTILITY API =======
 
-    /// @brief Get all objects (read-only)
-    /// @return A const reference to the list of objects
-    const std::vector<object_interface> &get_objects() const { return objects; }
+    /// @brief Get all objects
+    /// @return A reference to the list of objects
+    std::vector<object_interface> &get_objects() { return objects; }
 };
