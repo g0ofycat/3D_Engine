@@ -103,27 +103,31 @@ public:
 
     /// @brief Create a new object in the world
     /// @param shapeData: Shape data from object_lib containing vertices, colors, and count
-    /// @param pos: Initial position of the object (default: origin)
     /// @param scale: Initial scale of the object (default: 1, 1, 1)
+    /// @param pos: Initial position of the object (default: origin)
+    /// @param rotation: Initial rotation of the object (default: 0.0f, 0.0f, 0.0f)
     /// @return size_t: The ID of the object
     size_t create_new_object(
         const std::unordered_map<std::string, std::variant<int, std::vector<float>>> &shapeData,
+        const glm::vec3 &scale = {1.0f, 1.0f, 1.0f},
         const glm::vec3 &pos = {0.0f, 0.0f, 0.0f},
-        const glm::vec3 &scale = {1.0f, 1.0f, 1.0f})
+        const glm::vec3 &rotation = {0.0f, 0.0f, 0.0f})
     {
-        size_t obj_id = world_objects.spawn_object(shader, shapeData, pos, scale);
+        size_t obj_id = world_objects.spawn_object(shader, shapeData, scale, pos, rotation);
 
         return obj_id;
     }
 
     /// @brief Delete a specfic object
     /// @param obj_id: The ID of the object
-    void delete_object(size_t obj_id) {
+    void delete_object(size_t obj_id)
+    {
         world_objects.delete_object(obj_id);
     }
 
     /// @brief Clear all objects in the world
-    void clear_world() {
+    void clear_world()
+    {
         world_objects.clear_world();
     }
 
