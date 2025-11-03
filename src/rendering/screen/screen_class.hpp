@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include <GL/glew.h>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 // ======= screen_class =======
@@ -64,9 +64,9 @@ public:
 
         glfwMakeContextCurrent(window);
 
-        if (glewInit() != GLEW_OK)
+        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
         {
-            std::cerr << "Failed to initialize GLEW\n";
+            std::cerr << "Failed to initialize GLAD" << std::endl;
             return -1;
         }
 

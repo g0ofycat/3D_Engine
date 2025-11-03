@@ -2,6 +2,8 @@
 
 #include <unordered_map>
 
+#include "../../graphics/textures/texture_handler.hpp"
+
 #include "../../graphics/shaders/shader_class.hpp"
 
 #include <glm/glm.hpp>
@@ -27,6 +29,7 @@ private:
     glm::mat4 modelMatrix{1.0f};
 
     shader_class *shader;
+    texture_handler texture;
     Mesh mesh;
 
 private:
@@ -34,11 +37,11 @@ private:
     void updateModelMatrix()
     {
         modelMatrix = glm::mat4(1.0f);
-        modelMatrix = glm::scale(modelMatrix, scale);
         modelMatrix = glm::translate(modelMatrix, offset);
         modelMatrix = glm::rotate(modelMatrix, glm::radians(rotation.x), glm::vec3{1, 0, 0});
         modelMatrix = glm::rotate(modelMatrix, glm::radians(rotation.y), glm::vec3{0, 1, 0});
         modelMatrix = glm::rotate(modelMatrix, glm::radians(rotation.z), glm::vec3{0, 0, 1});
+        modelMatrix = glm::scale(modelMatrix, scale);
     }
 
 public:
@@ -122,8 +125,19 @@ public:
     {
         shader->setMat4("model", modelMatrix);
 
+        texture.bind(0);
+        shader->set_uniform1i("texture_diffuse", 0);
+
         glBindVertexArray(mesh.VAO);
         glDrawArrays(GL_TRIANGLES, 0, mesh.vertexCount);
+    }
+
+    // ======= TEXTURING API =======
+
+    /// @brief Applies a image as a texture to the current object
+    /// @param image_path: Path to the texture
+    void apply_texture(const std::string &image_path) {
+        texture.load_image(image_path);
     }
 
     // ======= UTILITY API =======

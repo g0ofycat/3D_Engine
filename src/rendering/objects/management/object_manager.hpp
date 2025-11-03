@@ -74,10 +74,11 @@ public:
     {
         std::vector<float> vertices = std::get<std::vector<float>>(shapeData.at("vertices"));
         std::vector<float> colors = std::get<std::vector<float>>(shapeData.at("colors"));
+        std::vector<float> texture_coords = std::get<std::vector<float>>(shapeData.at("texture_coords"));
 
         int count = std::get<int>(shapeData.at("count"));
 
-        unsigned int vao = vertices_class::create_object(vertices, colors);
+        unsigned int vao = vertices_class::create_object(vertices, colors, texture_coords);
 
         size_t index = create_new_object(shader, Mesh{vao, count});
 

@@ -12,7 +12,7 @@ public:
     // ======= 2D SHAPES =======
 
     /// @brief Triangle object
-    /// @return {{"vertices", vertices}, {"colors", colors}, {"count", 3}};
+    /// @return {{"vertices", vertices}, {"colors", colors}, {"texture_coords", texture_coords}, {"count", 3}};
     static std::unordered_map<std::string, std::variant<int, std::vector<float>>> triangle()
     {
         std::vector<float> vertices = {
@@ -25,11 +25,16 @@ public:
             0.0f, 1.0f, 0.0f,
             0.0f, 0.0f, 1.0f};
 
-        return {{"vertices", vertices}, {"colors", colors}, {"count", 3}};
+        std::vector<float> texture_coords = {
+            0.5f, 1.0f,
+            0.0f, 0.0f,
+            1.0f, 0.0f};
+
+        return {{"vertices", vertices}, {"colors", colors}, {"texture_coords", texture_coords}, {"count", 3}};
     }
 
     /// @brief Square object
-    /// @return {{"vertices", vertices}, {"colors", colors}, {"count", 6}};
+    /// @return {{"vertices", vertices}, {"colors", colors}, {"texture_coords", texture_coords}, {"count", 6}};
     static std::unordered_map<std::string, std::variant<int, std::vector<float>>> square()
     {
         std::vector<float> vertices = {
@@ -54,13 +59,17 @@ public:
             1.0f, 1.0f, 0.0f  // bottom-right
         };
 
-        return {{"vertices", vertices}, {"colors", colors}, {"count", 6}};
+        std::vector<float> texture_coords = {
+            0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+            0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f};
+
+        return {{"vertices", vertices}, {"colors", colors}, {"texture_coords", texture_coords}, {"count", 6}};
     }
 
     // ======= 3D SHAPES =======
 
     /// @brief Cube object
-    /// @return {{"vertices", vertices}, {"colors", colors}, {"count", 36}};
+    /// @return {{"vertices", vertices}, {"colors", colors}, {"texture_coords", texture_coords}, {"count", 36}};
     static std::unordered_map<std::string, std::variant<int, std::vector<float>>> cube()
     {
         std::vector<float> vertices = {
@@ -161,6 +170,25 @@ public:
             0.0f, 1.0f, 1.0f,
             0.0f, 1.0f, 1.0f};
 
-        return {{"vertices", vertices}, {"colors", colors}, {"count", 36}};
+        std::vector<float> texture_coords = {
+            0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+            1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+
+            0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+            1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+
+            0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+            1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+
+            0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+            1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+
+            0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+            1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+
+            0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+            1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f};
+
+        return {{"vertices", vertices}, {"colors", colors}, {"texture_coords", texture_coords}, {"count", 36}};
     }
 };

@@ -1,12 +1,16 @@
 #pragma once
 
+#include <iostream>
 #include <vector>
 
 #include "../rendering/screen/screen_class.hpp"
 #include "../rendering/screen/input/keybind_handler.hpp"
 
-#include "../rendering/graphics/vertices_class.hpp"
+#include "../rendering/graphics/geometry/vertices_class.hpp"
+
 #include "../rendering/graphics/shaders/shader_class.hpp"
+
+#include "../rendering/graphics/textures/texture_handler.hpp"
 
 #include "../rendering/objects/management/object_manager.hpp"
 #include "../rendering/objects/creation/object_lib.hpp"
@@ -14,7 +18,7 @@
 #include "../rendering/screen/input/movement_listener.hpp"
 #include "../rendering/screen/camera/player_camera_controller.hpp"
 
-#include <GL/glew.h>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include <glm/glm.hpp>
@@ -29,7 +33,9 @@ private:
 
     screen_class screen;
     shader_class shader;
+
     keybind_handler key_handler;
+
     player_camera_controller camera;
     movement_listener mover;
 

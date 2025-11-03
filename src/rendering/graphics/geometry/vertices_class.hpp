@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include <glad/glad.h>
+
 // ======= vertices_class =======
 
 class vertices_class
@@ -12,13 +14,19 @@ public:
     /// @brief Creates a new object using the vertices
     /// @param vertices
     /// @param colors
+    /// @param texcoords
     /// @return unsigned int: VAO
-    static unsigned int create_object(const std::vector<float> &vertices, const std::vector<float> &colors)
+    static unsigned int create_object(const std::vector<float> &vertices, const std::vector<float> &colors, const std::vector<float> &texcoords = {})
     {
-        unsigned int VAO, VBO[2];
-
+        unsigned int VAO, VBO[3] = {0, 0, 0};
         glGenVertexArrays(1, &VAO);
-        glGenBuffers(2, VBO);
+
+        int bufferCount = 2;
+
+        if (!texcoords.empty())
+            bufferCount = 3;
+
+        glGenBuffers(bufferCount, VBO);
 
         glBindVertexArray(VAO);
 
@@ -31,6 +39,14 @@ public:
         glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(float), colors.data(), GL_STATIC_DRAW);
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
         glEnableVertexAttribArray(1);
+
+        if (!texcoords.empty())
+        {
+            glBindBuffer(GL_ARRAY_BUFFER, VBO[2]);
+            glBufferData(GL_ARRAY_BUFFER, texcoords.size() * sizeof(float), texcoords.data(), GL_STATIC_DRAW);
+            glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void *)0);
+            glEnableVertexAttribArray(2);
+        }
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);

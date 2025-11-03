@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -7,6 +8,8 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+
+#include <glad/glad.h>
 
 // ======= shader_class =======
 
@@ -84,29 +87,6 @@ public:
     /// @brief Destroy the shader program
     void destroy() const { glDeleteProgram(ID); }
 
-    /// @brief Set a matrix
-    /// @param name: Name of the matrix
-    /// @param mat: The matrix
-    void setMat4(const std::string &name, const glm::mat4 &mat) const
-    {
-        int loc = glGetUniformLocation(ID, name.c_str());
-        glUniformMatrix4fv(loc, 1, GL_FALSE, &mat[0][0]);
-    }
-
-    /// @brief Set a vec3 uniform
-    void set_uniform3f(const std::string &name, float x, float y, float z) const
-    {
-        int loc = glGetUniformLocation(ID, name.c_str());
-        glUniform3f(loc, x, y, z);
-    }
-
-    /// @brief Set a vec3 uniform using glm::vec3
-    void setVec3(const std::string &name, const glm::vec3 &value) const
-    {
-        int loc = glGetUniformLocation(ID, name.c_str());
-        glUniform3f(loc, value.x, value.y, value.z);
-    }
-
     // ======= STATIC METHODS =======
 
     /// @brief Load shader source from file
@@ -123,5 +103,45 @@ public:
         ss << file.rdbuf();
 
         return ss.str();
+    }
+
+    // ======= UTILITY API =======
+
+    /// @brief Set a matrix
+    /// @param name: Name of the matrix
+    /// @param mat: The matrix
+    void setMat4(const std::string &name, const glm::mat4 &mat) const
+    {
+        int loc = glGetUniformLocation(ID, name.c_str());
+        glUniformMatrix4fv(loc, 1, GL_FALSE, &mat[0][0]);
+    }
+
+    /// @brief Set a vec3 uniform using glm::vec3
+    /// @param name: Name of the uniform
+    /// @param value: The value to set
+    void setVec3(const std::string &name, const glm::vec3 &value) const
+    {
+        int loc = glGetUniformLocation(ID, name.c_str());
+        glUniform3f(loc, value.x, value.y, value.z);
+    }
+
+    /// @brief Set a vec3 uniform
+    /// @param name: Name of the uniform
+    /// @param x
+    /// @param y
+    /// @param z
+    void set_uniform3f(const std::string &name, float x, float y, float z) const
+    {
+        int loc = glGetUniformLocation(ID, name.c_str());
+        glUniform3f(loc, x, y, z);
+    }
+
+    /// @brief Set a uniform1i
+    /// @param name: Name of the uniform
+    /// @param value: The value to set
+    void set_uniform1i(const std::string &name, int value) const
+    {
+        int loc = glGetUniformLocation(ID, name.c_str());
+        glUniform1i(loc, value);
     }
 };
