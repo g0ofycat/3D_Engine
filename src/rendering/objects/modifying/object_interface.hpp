@@ -1,7 +1,5 @@
 #pragma once
 
-#include <unordered_map>
-
 #include "../../graphics/textures/texture_handler.hpp"
 
 #include "../../graphics/shaders/shader_class.hpp"
@@ -32,6 +30,8 @@ private:
     texture_handler texture;
     Mesh mesh;
 
+    bool hasTexture;
+
 private:
     /// @brief Update the model matrix based on current transformations
     void updateModelMatrix()
@@ -51,7 +51,7 @@ public:
     /// @param shaderRef: Reference to the shader
     /// @param meshRef: Reference to the mesh
     object_interface(shader_class &shaderRef, const Mesh &meshRef)
-        : shader(&shaderRef), mesh(meshRef)
+        : shader(&shaderRef), mesh(meshRef), hasTexture(false)
     {
         updateModelMatrix();
     }
@@ -125,8 +125,13 @@ public:
     {
         shader->setMat4("model", modelMatrix);
 
-        texture.bind(0);
-        shader->set_uniform1i("texture_diffuse", 0);
+        shader->set_uniform1i("use_texture", hasTexture);
+
+        if (hasTexture)
+        {
+            texture.bind(0);
+            shader->set_uniform1i("texture_diffuse", 0);
+        }
 
         glBindVertexArray(mesh.VAO);
         glDrawArrays(GL_TRIANGLES, 0, mesh.vertexCount);
@@ -134,10 +139,16 @@ public:
 
     // ======= TEXTURING API =======
 
+    /// @brief Checks if the object has a texture
+    /// @return bool
+    bool has_texture() const { return hasTexture; }
+
     /// @brief Applies a image as a texture to the current object
     /// @param image_path: Path to the texture
-    void apply_texture(const std::string &image_path) {
+    void apply_texture(const std::string &image_path)
+    {
         texture.load_image(image_path);
+        hasTexture = true;
     }
 
     // ======= UTILITY API =======

@@ -1,20 +1,16 @@
 #version 330 core
 
-in vec2 TexCoords;
+in vec2 textureCoords;
 in vec3 vertexColor;
-out vec4 FragColor;
+out vec4 fragColor;
 
 uniform sampler2D texture_diffuse;
-
-// todo: fix hacky fragment code
+uniform bool use_texture;
 
 void main()
 {
     vec4 vertexCol = vec4(vertexColor, 1.0);
-    vec4 texCol = texture(texture_diffuse, TexCoords);
+    vec4 textureCol = texture(texture_diffuse, textureCoords);
 
-    if(texCol.rgb == vec3(0.0))
-        FragColor = vertexCol;
-    else
-        FragColor = mix(vertexCol, texCol, 1.0);
+    fragColor = use_texture ? texture(texture_diffuse, textureCoords) : vec4(vertexColor, 1.0);
 }

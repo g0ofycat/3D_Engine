@@ -18,7 +18,7 @@ public:
     /// @brief Constructor for object_manager
     object_manager()
     {
-        objects.reserve(10000); // no realloc for 10k obj
+        objects.reserve(10000); // no realloc for first 10k obj
     }
 
     // ======= MAIN API =======
