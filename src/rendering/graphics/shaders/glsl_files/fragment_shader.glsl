@@ -12,5 +12,5 @@ void main()
     vec4 vertexCol = vec4(vertexColor, 1.0);
     vec4 textureCol = texture(texture_diffuse, textureCoords);
 
-    fragColor = use_texture ? texture(texture_diffuse, textureCoords) : vec4(vertexColor, 1.0);
+    fragColor = use_texture ? vertexCol * textureCol : vertexCol;
 }
