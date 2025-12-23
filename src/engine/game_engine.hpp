@@ -93,8 +93,9 @@ public:
     /// @param valid_keys: Keys that should be tracked
     game_engine(int width, int height, const char *title, const std::vector<int> &valid_keys)
         : screen(width, height, title),
-          shader("../src/rendering/graphics/shaders/glsl_files/vertex_shader.glsl",
-                 "../src/rendering/graphics/shaders/glsl_files/fragment_shader.glsl"),
+          shader(
+              "shaders/glsl_files/vertex_shader.glsl",
+              "shaders/glsl_files/fragment_shader.glsl"),
           key_handler(screen, valid_keys),
           camera(),
           mover(key_handler, camera)
