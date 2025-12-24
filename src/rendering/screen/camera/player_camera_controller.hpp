@@ -88,7 +88,7 @@ public:
     /// @param yaw_: X axis rotation
     /// @param pitch_: Y axis rotation
     player_camera_controller(Vec3 pos = {0, 0, 3}, Vec3 upDir = {0, 1, 0}, float yaw_ = -90.0f, float pitch_ = 0.0f)
-        : position(pos), worldUp(upDir), yaw(yaw_), pitch(pitch_), speed(2.5f), sensitivity(0.1f)
+        : position(pos), worldUp(upDir), yaw(yaw_), pitch(pitch_), speed(2.5f), sensitivity(0.05f)
     {
         updateVectors();
     }

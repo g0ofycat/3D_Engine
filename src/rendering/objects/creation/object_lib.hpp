@@ -4,6 +4,10 @@
 #include <unordered_map>
 #include <variant>
 
+// ======= object macros =======
+
+#define PI 3.1415926f
+
 // ======= object_lib =======
 
 class object_lib
@@ -190,5 +194,80 @@ public:
             1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f};
 
         return {{"vertices", vertices}, {"colors", colors}, {"texture_coords", texture_coords}, {"count", 36}};
+    }
+
+    static std::unordered_map<std::string, std::variant<int, std::vector<float>>> sphere(int lat_segments = 16, int lon_segments = 16)
+    {
+        std::vector<float> vertices;
+        std::vector<float> colors;
+        std::vector<float> texture_coords;
+
+        for (int i = 0; i <= lat_segments; ++i)
+        {
+            float theta = i * PI / lat_segments;
+            float sinTheta = sin(theta);
+            float cosTheta = cos(theta);
+
+            for (int j = 0; j <= lon_segments; ++j)
+            {
+                float phi = j * 2.0f * PI / lon_segments;
+                float sinPhi = sin(phi);
+                float cosPhi = cos(phi);
+
+                float x = cosPhi * sinTheta;
+                float y = cosTheta;
+                float z = sinPhi * sinTheta;
+
+                vertices.push_back(x * 0.5f);
+                vertices.push_back(y * 0.5f);
+                vertices.push_back(z * 0.5f);
+
+                colors.push_back((x + 1.0f) / 2.0f);
+                colors.push_back((y + 1.0f) / 2.0f);
+                colors.push_back((z + 1.0f) / 2.0f);
+
+                texture_coords.push_back(j / (float)lon_segments);
+                texture_coords.push_back(i / (float)lat_segments);
+            }
+        }
+
+        std::vector<float> sphere_vertices;
+        std::vector<float> sphere_colors;
+        std::vector<float> sphere_texcoords;
+
+        int count = 0;
+
+        for (int i = 0; i < lat_segments; ++i)
+        {
+            for (int j = 0; j < lon_segments; ++j)
+            {
+                int first = (i * (lon_segments + 1)) + j;
+                int second = first + lon_segments + 1;
+
+                auto add_vertex = [&](int idx)
+                {
+                    sphere_vertices.push_back(vertices[3 * idx]);
+                    sphere_vertices.push_back(vertices[3 * idx + 1]);
+                    sphere_vertices.push_back(vertices[3 * idx + 2]);
+                    sphere_colors.push_back(colors[3 * idx]);
+                    sphere_colors.push_back(colors[3 * idx + 1]);
+                    sphere_colors.push_back(colors[3 * idx + 2]);
+                    sphere_texcoords.push_back(texture_coords[2 * idx]);
+                    sphere_texcoords.push_back(texture_coords[2 * idx + 1]);
+                };
+
+                add_vertex(first);
+                add_vertex(second);
+                add_vertex(first + 1);
+
+                add_vertex(second);
+                add_vertex(second + 1);
+                add_vertex(first + 1);
+
+                count += 6;
+            }
+        }
+
+        return {{"vertices", sphere_vertices}, {"colors", sphere_colors}, {"texture_coords", sphere_texcoords}, {"count", count}};
     }
 };

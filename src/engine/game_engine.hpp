@@ -1,7 +1,11 @@
 #pragma once
 
+#include <optional>
+#include <chrono>
+#include <functional>
 #include <iostream>
 #include <vector>
+#include <string>
 
 #include "../rendering/screen/screen_class.hpp"
 #include "../rendering/screen/input/keybind_handler.hpp"
@@ -126,6 +130,14 @@ public:
         return obj_id;
     }
 
+    /// @brief Get an object using its ID
+    /// @param obj_id: The object ID
+    /// @return object_interface
+    object_interface &get_object(size_t obj_id)
+    {
+        return world_objects.get_object(obj_id);
+    }
+
     /// @brief Delete a specfic object
     /// @param obj_id: The ID of the object
     void delete_object(size_t obj_id)
@@ -142,14 +154,27 @@ public:
     // ======= RENDERING API =======
 
     /// @brief Run the engine loop
-    void run()
+    /// @param logic: Optional Logic to run while in the game loop; @returns The delta_time between each frame (default: std::nullopt)
+    void run(std::optional<std::function<void(float)>> logic = std::nullopt)
     {
         shader.use();
 
+        auto last_time = std::chrono::high_resolution_clock().now();
+
         while (!screen.should_close())
         {
+            auto now = std::chrono::high_resolution_clock().now();
+
+            float delta_time =
+                std::chrono::duration<float>(now - last_time).count();
+
+            last_time = now;
+
             screen.clear();
             mover.update();
+
+            if (logic)
+                (*logic)(delta_time);
 
             render();
 
