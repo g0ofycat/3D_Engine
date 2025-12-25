@@ -4,6 +4,8 @@
 
 #include "../../graphics/shaders/shader_class.hpp"
 
+#include <functional>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -17,18 +19,29 @@ struct Mesh
 
 // ======= object_interface =======
 
+class object_interface;
+
+// ======= namespaces =======
+
+using preset_fn = std::function<void(object_interface &)>;
+
+// ======= object_interface =======
+
 class object_interface
 {
 private:
     glm::vec3 scale{1.0f};
     glm::vec3 offset{0.0f};
     glm::vec3 rotation{0.0f};
+    glm::vec3 velocity{0.0f};
 
     glm::mat4 modelMatrix{1.0f};
 
     shader_class *shader;
     texture_handler texture;
     Mesh mesh;
+
+    float mass{1.0f};
 
     bool hasTexture;
 
@@ -51,7 +64,7 @@ public:
     /// @param shaderRef: Reference to the shader
     /// @param meshRef: Reference to the mesh
     object_interface(shader_class &shaderRef, const Mesh &meshRef)
-        : shader(&shaderRef), mesh(meshRef), hasTexture(false)
+        : shader(&shaderRef), mesh(meshRef), hasTexture(false), mass(1.0f * this->get_summed_scale())
     {
         updateModelMatrix();
     }
@@ -118,6 +131,34 @@ public:
         updateModelMatrix();
     }
 
+    // ======= OBJECT MOVEMENT CONTROL =======
+
+    /// @brief Add to the mass of the object
+    /// @param mass: Mass to add
+    void mass_add(float mass)
+    {
+        this->mass += mass;
+    }
+
+    /// @brief Set the mass of the object
+    /// @param mass: Mass to set
+    void mass_set(float mass)
+    {
+        this->mass = mass;
+    }
+
+    /// @brief Add to the velocity of the object
+    /// @param vx: X Velocity
+    /// @param vy: Y Velocity
+    /// @param vz: Z Velocity
+    void velocity_add(float vx, float vy, float vz) { velocity += glm::vec3(vx, vy, vz); }
+
+    /// @brief Set the velocity of the object
+    /// @param vx: X Velocity
+    /// @param vy: Y Velocity
+    /// @param vz: Z Velocity
+    void velocity_set(float vx, float vy, float vz) { velocity = glm::vec3(vx, vy, vz); }
+
     // ======= RENDERING =======
 
     /// @brief Render the object
@@ -151,11 +192,35 @@ public:
         hasTexture = true;
     }
 
+    // ======= OBJECT CONTROL API =======
+
+    /// @brief Apply a preset from logic_presets.hpp
+    /// @param preset: The preset to add
+    void apply_preset(const preset_fn &preset)
+    {
+        preset(*this);
+    }
+
+    /// @brief Update the position of the object based on velocity and delta time
+    /// @param delta_time: Delta time
+    void update_position(float delta_time)
+    {
+        offset += velocity * delta_time;
+        updateModelMatrix();
+    }
+
     // ======= UTILITY API =======
 
     /// @brief Return scale of the current shader
     /// @return const glm::vec3&
     const glm::vec3 &get_scale() const { return scale; }
+
+    /// @brief Get the summed scale values
+    /// @return size_t
+    const size_t get_summed_scale() const
+    {
+        return static_cast<size_t>(scale.x + scale.y + scale.z);
+    }
 
     /// @brief Return offset of the current shader
     /// @return const glm::vec3&
@@ -172,4 +237,12 @@ public:
     /// @brief Get the current mesh
     /// @return const Mesh&
     const Mesh &get_mesh() const { return mesh; }
+
+    /// @brief Get the current mass
+    /// @return float
+    const float get_mass() const { return mass; }
+
+    /// @brief Get the current velocity
+    /// @return const glm::vec3
+    const glm::vec3 get_velocity() const { return velocity; }
 };
