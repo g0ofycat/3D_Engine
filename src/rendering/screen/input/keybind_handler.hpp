@@ -7,8 +7,6 @@
 
 #include <GLFW/glfw3.h>
 
-#include "../screen_class.hpp"
-
 // ======= TYPEDEF =======
 
 typedef std::function<void(int)> callback_func;
