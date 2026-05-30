@@ -1,0 +1,29 @@
+CompileFlags:
+  Add:
+    - "-Wall"
+    - "-Wextra"
+  Remove:
+    - "-DNDEBUG"
+    - "-O3"
+  CompilationDatabase: "build"
+
+Index:
+  Background: Build
+  StandardLibrary: Yes
+
+InlayHints:
+  Enabled: Yes
+  ParameterNames: Yes
+  DeducedTypes: Yes
+
+Hover:
+  ShowAKA: Yes
+
+Completion:
+  AllScopes: Yes
+
+Diagnostics:
+  Suppress:
+    - "missing-prototypes"
+    - "unused-command-line-argument-hard-error-in-future"
+  UnusedIncludes: "Strict"
