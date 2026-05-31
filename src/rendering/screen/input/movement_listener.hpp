@@ -1,8 +1,9 @@
 #pragma once
 
+#include "./keybind_handler.hpp"
+
 #include <GLFW/glfw3.h>
 
-#include "./keybind_handler.hpp"
 #include "../camera/player_camera_controller.hpp"
 
 // ======= movement_listener =======

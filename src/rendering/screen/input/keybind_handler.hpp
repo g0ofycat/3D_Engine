@@ -5,6 +5,8 @@
 #include <functional>
 #include <vector>
 
+#include "../screen_class.hpp"
+
 #include <GLFW/glfw3.h>
 
 // ======= TYPEDEF =======
